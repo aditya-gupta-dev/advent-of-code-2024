@@ -110,7 +110,52 @@ func PartOne() {
 	fmt.Println("Total safe reports :", safe_reports)
 }
 
-func isSafeReportWithDampener(level []int) bool {
+func isSafeReportWithDampener(levels []int, alreadyRemoved bool) bool {
+	if alreadyRemoved {
+		return false
+	}
+	var direction int
+	for i := 1; i < len(levels); i++ {
+		diff := levels[i] - levels[i-1]
+		if diff == 0 || abs(diff) > 3 {
+			var newLevels []int
+			for j := 0; j < len(levels); j++ {
+				if j == i-1 {
+					continue
+				}
+				newLevels = append(newLevels, levels[j])
+			}
+			return isSafeReportWithDampener(newLevels, true)
+		}
+		if direction == 0 {
+			if diff > 0 {
+				direction = 1
+			} else {
+				direction = -1
+			}
+		} else {
+			if direction == 1 && diff < 0 {
+				var newLevels []int
+				for j := 0; j < len(levels); j++ {
+					if j == i-1 {
+						continue
+					}
+					newLevels = append(newLevels, levels[j])
+				}
+				return isSafeReportWithDampener(newLevels, true)
+			}
+			if direction == -1 && diff > 0 {
+				var newLevels []int
+				for j := 0; j < len(levels); j++ {
+					if j == i-1 {
+						continue
+					}
+					newLevels = append(newLevels, levels[j])
+				}
+				return isSafeReportWithDampener(newLevels, true)
+			}
+		}
+	}
 	return true
 }
 
@@ -130,7 +175,9 @@ func PartTwo() {
 
 	var safe_reports int
 	for _, report := range reports {
-		if isSafeReportWithDampener(report) {
+		// make the normal function return true, and index at which it failed then remove the element from the
+		// array and recheck
+		if isSafeReportWithDampener(report, false) {
 			safe_reports++
 		}
 	}

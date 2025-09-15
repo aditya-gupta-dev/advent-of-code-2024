@@ -4,5 +4,5 @@ import "gopher/daytwo"
 
 func main() {
 
-	daytwo.PartOne()
+	daytwo.PartTwo()
 }
