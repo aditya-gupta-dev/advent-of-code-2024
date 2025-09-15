@@ -109,3 +109,31 @@ func PartOne() {
 	}
 	fmt.Println("Total safe reports :", safe_reports)
 }
+
+func isSafeReportWithDampener(level []int) bool {
+	return true
+}
+
+func PartTwo() {
+	bytes, err := os.ReadFile("../input-two.txt")
+	if err != nil {
+		panic(err)
+	}
+
+	data := string(bytes)
+	lines := strings.Split(data, "\n")
+	reports := make([][]int, len(lines))
+
+	for i, line := range lines {
+		reports[i] = getPartsOfLine(line)
+	}
+
+	var safe_reports int
+	for _, report := range reports {
+		if isSafeReportWithDampener(report) {
+			safe_reports++
+		}
+	}
+
+	fmt.Println("safe reports with dampener :", safe_reports)
+}
