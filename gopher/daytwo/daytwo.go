@@ -28,12 +28,12 @@ func abs(x int) int {
 	return x
 }
 
-func isSafeReport(levels []int) bool {
+func isSafeReport(levels []int) (bool, int) {
 	var direction int // +1 for increasing, -1 for decreasing
 	for i := 1; i < len(levels); i++ {
 		diff := levels[i] - levels[i-1]
 		if diff == 0 || abs(diff) > 3 { // must be nonzero and <= 3
-			return false
+			return false, i
 		}
 		if direction == 0 {
 			if diff > 0 {
@@ -43,14 +43,14 @@ func isSafeReport(levels []int) bool {
 			}
 		} else {
 			if direction == 1 && diff < 0 {
-				return false
+				return false, i
 			}
 			if direction == -1 && diff > 0 {
-				return false
+				return false, i
 			}
 		}
 	}
-	return true
+	return true, -1
 }
 func sortArray(arr []int, desc bool) {
 	n := len(arr)
@@ -103,7 +103,8 @@ func PartOne() {
 
 	var safe_reports int = 0
 	for _, report := range reports {
-		if isSafeReport(report) {
+		isSafe, _ := isSafeReport(report)
+		if isSafe {
 			safe_reports++
 		}
 	}
@@ -175,10 +176,15 @@ func PartTwo() {
 
 	var safe_reports int
 	for _, report := range reports {
-		// make the normal function return true, and index at which it failed then remove the element from the
-		// array and recheck
-		if isSafeReportWithDampener(report, false) {
+		// nums = append(nums[:indexToRemove], nums[indexToRemove+1:]...)
+		isSafe, indexToRemove := isSafeReport(report)
+		if isSafe {
 			safe_reports++
+		} else {
+			isSafe, _ = isSafeReport(append(report[:indexToRemove], report[indexToRemove+1:]...))
+			if isSafe {
+				safe_reports++
+			}
 		}
 	}
 
