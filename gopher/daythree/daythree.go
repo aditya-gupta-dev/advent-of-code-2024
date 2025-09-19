@@ -60,7 +60,11 @@ func PartOne() {
 }
 
 func PartTwo() {
-	scanner := bufio.NewScanner(os.Stdin)
+	file, err := os.Open("../input-three.txt")
+	if err != nil {
+		panic(err)
+	}
+	scanner := bufio.NewScanner(file)
 	var input string
 	for scanner.Scan() {
 		input += scanner.Text()
