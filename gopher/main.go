@@ -1,8 +1,9 @@
 package main
 
-import "gopher/daytwo"
+import (
+	"gopher/daythree"
+)
 
 func main() {
-
-	daytwo.PartTwo()
+	daythree.PartTwo()
 }
